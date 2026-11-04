@@ -20,3 +20,8 @@ Thumbs.db
 
 # Editor files
 .vscode/
+# Local database backups
+*.cfg.backup
+
+# Temporary test scripts
+server/test*.js

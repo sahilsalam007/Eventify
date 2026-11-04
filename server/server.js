@@ -4,6 +4,8 @@ import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
 import eventRoutes from "./routes/eventRoutes.js";
+import ticketRoutes from "./routes/ticketRoutes.js";
+import bookingRoutes from "./routes/bookingRoutes.js";
 
 dotenv.config();
 
@@ -24,8 +26,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/auth", authRoutes);
 
 // Event routes
+app.use("/api/events", bookingRoutes);
 app.use("/api/events", eventRoutes);
-
+app.use("/api/events", ticketRoutes);
 // Health check route
 app.get("/", (req, res) => {
   res.status(200).json({
