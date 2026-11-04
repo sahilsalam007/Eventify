@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import authRoutes from "./routes/authRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,9 @@ app.use(express.urlencoded({ extended: true }));
 
 // Authentication routes
 app.use("/api/auth", authRoutes);
+
+// Event routes
+app.use("/api/events", eventRoutes);
 
 // Health check route
 app.get("/", (req, res) => {
