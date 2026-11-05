@@ -1,6 +1,9 @@
 import { CalendarDays, MapPin, ArrowUpRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function EventCard({ event }) {
+  const navigate = useNavigate();
+
   const formattedDate = new Date(event.date).toLocaleDateString("en-IN", {
     day: "numeric",
     month: "short",
@@ -9,7 +12,6 @@ function EventCard({ event }) {
 
   return (
     <article className="group overflow-hidden rounded-2xl border border-white/10 bg-[#141b31] transition duration-300 hover:-translate-y-2 hover:border-purple-500/50">
-      {/* Event Image */}
       <div className="relative h-52 overflow-hidden">
         <img
           src={event.image}
@@ -21,12 +23,13 @@ function EventCard({ event }) {
           {event.category}
         </span>
 
-        <span className="absolute bottom-4 right-4 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-semibold text-white">
-          ₹{event.price}
-        </span>
+        {event.price !== null && (
+          <span className="absolute bottom-4 right-4 rounded-lg bg-purple-600 px-3 py-1.5 text-sm font-semibold text-white">
+            ₹{event.price}
+          </span>
+        )}
       </div>
 
-      {/* Event Details */}
       <div className="p-5">
         <h3 className="text-lg font-semibold text-white transition group-hover:text-purple-400">
           {event.title}
@@ -44,7 +47,10 @@ function EventCard({ event }) {
           </div>
         </div>
 
-        <button className="mt-6 flex w-full items-center justify-between rounded-lg border border-white/10 px-4 py-3 text-sm font-medium text-white transition hover:border-purple-500 hover:bg-purple-600">
+        <button
+          onClick={() => navigate(`/events/${event.id}`)}
+          className="mt-6 flex w-full items-center justify-between rounded-lg border border-white/10 px-4 py-3 text-sm font-medium text-white transition hover:border-purple-500 hover:bg-purple-600"
+        >
           View Details
           <ArrowUpRight size={17} />
         </button>

@@ -47,9 +47,7 @@ export const createBooking = async (req, res) => {
     }
 
     // Prevent duplicate ticket types
-    const ticketTypeIds = tickets.map((ticket) =>
-      ticket.ticketType.toString()
-    );
+    const ticketTypeIds = tickets.map((ticket) => ticket.ticketType.toString());
 
     if (new Set(ticketTypeIds).size !== ticketTypeIds.length) {
       return res.status(400).json({
@@ -86,11 +84,7 @@ export const createBooking = async (req, res) => {
           throw new Error("Invalid or inactive ticket type");
         }
 
-        await reserveTickets(
-          ticketType._id,
-          selectedTicket.quantity,
-          session
-        );
+        await reserveTickets(ticketType._id, selectedTicket.quantity, session);
 
         const subtotal = ticketType.price * selectedTicket.quantity;
 
@@ -119,9 +113,10 @@ export const createBooking = async (req, res) => {
             event: eventId,
             tickets: bookingTickets,
             totalAmount,
+            expiresAt: new Date(Date.now() + 10 * 60 * 1000),
           },
         ],
-        { session }
+        { session },
       );
 
       booking = createdBookings[0];
@@ -143,7 +138,6 @@ export const createBooking = async (req, res) => {
     await session.endSession();
   }
 };
-
 
 // Get logged-in customer's bookings
 export const getMyBookings = async (req, res) => {
@@ -244,7 +238,7 @@ export const cancelBooking = async (req, res) => {
         {
           returnDocument: "after",
           session,
-        }
+        },
       );
 
       if (!booking) {
@@ -253,11 +247,7 @@ export const cancelBooking = async (req, res) => {
 
       // Release all reserved tickets inside the transaction
       for (const ticket of booking.tickets) {
-        await releaseTickets(
-          ticket.ticketType,
-          ticket.quantity,
-          session
-        );
+        await releaseTickets(ticket.ticketType, ticket.quantity, session);
       }
     });
 
@@ -284,4 +274,3 @@ export const cancelBooking = async (req, res) => {
     await session.endSession();
   }
 };
-
