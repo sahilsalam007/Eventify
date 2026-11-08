@@ -1,3 +1,4 @@
+import { createTicketsForBooking } from "../services/ticketGenerationService.js";
 import crypto from "crypto";
 import mongoose from "mongoose";
 import { refundLatePayment } from "../services/paymentRefundService.js";
@@ -258,6 +259,8 @@ export const verifyPayment = async (req, res) => {
         if (!updatedBooking) {
           throw new Error("Booking cannot be confirmed");
         }
+                // Generate individual tickets for the confirmed booking
+        await createTicketsForBooking(updatedBooking, session);
       });
     } catch (error) {
       // Check the latest payment and booking after transaction failure

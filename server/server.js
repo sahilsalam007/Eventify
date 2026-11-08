@@ -1,4 +1,3 @@
-
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
@@ -9,6 +8,8 @@ import ticketRoutes from "./routes/ticketRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import { expirePendingBookings } from "./services/bookingExpiryService.js";
+import issuedTicketRoutes from "./routes/issuedTicketRoutes.js";
+import checkInRoutes from "./routes/checkInRoutes.js";
 
 const app = express();
 
@@ -21,10 +22,7 @@ app.use(
 );
 
 // Razorpay webhook needs the raw request body
-app.use(
-  "/api/payments/webhook",
-  express.raw({ type: "application/json" }),
-);
+app.use("/api/payments/webhook", express.raw({ type: "application/json" }));
 
 // JSON middleware
 app.use(express.json());
@@ -40,6 +38,9 @@ app.use("/api/events", ticketRoutes);
 
 // Payment routes
 app.use("/api/payments", paymentRoutes);
+
+app.use("/api/tickets", issuedTicketRoutes);
+app.use("/api/tickets", checkInRoutes);
 
 // Health check route
 app.get("/", (req, res) => {
@@ -72,7 +73,7 @@ const startServer = async () => {
 
       if (expiredCount > 0) {
         console.log(
-          `Booking expiry completed: ${expiredCount} booking(s) checked`
+          `Booking expiry completed: ${expiredCount} booking(s) checked`,
         );
       }
     } catch (error) {
