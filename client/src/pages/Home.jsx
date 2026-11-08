@@ -1,4 +1,5 @@
 
+import Navbar from "../components/layout/Navbar";
 import FeaturedEvents from "../features/events/components/FeaturedEvents";
 import EventCategories from "../features/events/components/EventCategories";
 import AboutSection from "../components/common/AboutSection";
@@ -16,28 +17,7 @@ import {
 function Home() {
   return (
     <div className="min-h-screen bg-[#0b1020] text-white">
-      {/* Navbar */}
-      <nav className="flex items-center justify-between px-8 py-6 lg:px-20">
-        <h1 className="text-2xl font-bold tracking-wide">
-          Event<span className="text-purple-500">ify.</span>
-        </h1>
-
-        <div className="hidden items-center gap-8 text-sm text-gray-300 md:flex">
-          <a href="/" className="text-white">Home</a>
-          <a href="#events" className="hover:text-purple-400">Explore Events</a>
-          <a href="#about" className="hover:text-purple-400">About</a>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button className="hidden rounded-lg px-4 py-2 text-sm text-gray-300 hover:text-white sm:block">
-            Login
-          </button>
-
-          <button className="rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-semibold hover:bg-purple-700">
-            Get Started
-          </button>
-        </div>
-      </nav>
+      <Navbar />
 
       {/* Hero Section */}
       <main className="px-6 pb-20 pt-20 text-center lg:px-20">
@@ -94,6 +74,7 @@ function Home() {
           </button>
         </div>
       </main>
+
       <FeaturedEvents />
       <EventCategories />
       <AboutSection />
