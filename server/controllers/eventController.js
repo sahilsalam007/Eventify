@@ -415,3 +415,42 @@ export const getMyEvents = async (req, res) => {
     });
   }
 };
+
+// Get single event for its organizer (including drafts)
+
+export const getMySingleEvent = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid event ID",
+      });
+    }
+
+    const event = await Event.findOne({
+      _id: id,
+      organizer: req.user._id,
+    }).populate("organizer", "name");
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found or you are not authorized to access it",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      event,
+    });
+  } catch (error) {
+    console.error("Get organizer event error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Server error while fetching event",
+    });
+  }
+};

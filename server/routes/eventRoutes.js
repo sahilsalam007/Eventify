@@ -5,6 +5,7 @@ import {
   getAllEvents,
   publishEvent,
   getSingleEvent,
+  getMySingleEvent,
   updateEvent,
   deleteEvent,
   getMyEvents,
@@ -17,15 +18,13 @@ const router = express.Router();
 // Public route - Get all published events
 router.get("/", getAllEvents);
 
-// Organizer-only route - Get my events
-router.get(
-  "/my-events",
-  protect,
-  authorize("organizer"),
-  getMyEvents
-);
+// Organizer-only route - Get all my events
+router.get("/my-events", protect, authorize("organizer"), getMyEvents);
 
-// Public route - Get single published event
+// Organizer-only route - Get a single event (including drafts)
+router.get("/my-events/:id", protect, authorize("organizer"), getMySingleEvent);
+
+// Public route - Get a single published event
 router.get("/:id", getSingleEvent);
 
 // Organizer-only route - Create event
@@ -33,9 +32,11 @@ router.post("/", protect, authorize("organizer"), createEvent);
 
 // Organizer-only route - Publish event
 router.patch("/:id/publish", protect, authorize("organizer"), publishEvent);
+
 // Organizer-only route - Update event
 router.put("/:id", protect, authorize("organizer"), updateEvent);
 
 // Organizer-only route - Delete event
 router.delete("/:id", protect, authorize("organizer"), deleteEvent);
+
 export default router;
